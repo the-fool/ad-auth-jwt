@@ -31,14 +31,14 @@ namespace Authy.Controllers {
       return new RedirectResult(url, false);
     }
 
-    [HttpGet("user")]
+    [HttpGet("testuser")]
     [Authorize]
     public ActionResult<string> TestUser() {
       var user = userService.WhoAmI(HttpContext);
       return JsonConvert.SerializeObject(user);
     }
 
-    [HttpGet("token")]
+    [HttpGet("testtoken")]
     [Authorize]
     public ActionResult<string> TestToken() {
       var token = tokenService.MakeToken(HttpContext);

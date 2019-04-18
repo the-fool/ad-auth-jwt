@@ -4,10 +4,10 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
+using Authy.Helpers;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using Authy.Helpers;
 
 namespace Authy.Services {
   public class TokenService {
@@ -25,11 +25,14 @@ namespace Authy.Services {
       var user = userService.WhoAmI(ctx);
       var tokenHandler = new JwtSecurityTokenHandler();
       var key = Encoding.ASCII.GetBytes(appSettings.Secret);
+      var claims = new Claim[] {
+        new Claim("sub", user.AccountName),
+        new Claim("iss", "authy"),
+        new Claim("name", user.DisplayName)
+      };
+      var subject = new ClaimsIdentity(claims);
       var tokenDescriptor = new SecurityTokenDescriptor {
-        Subject = new ClaimsIdentity(new Claim[] {
-        new Claim(ClaimTypes.WindowsAccountName, user.AccountName),
-        new Claim(ClaimTypes.GivenName, user.DisplayName)
-        }),
+        Subject = subject,
         Expires = DateTime.UtcNow.AddDays(7),
         SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
       };
