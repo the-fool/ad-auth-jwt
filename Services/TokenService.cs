@@ -33,7 +33,7 @@ namespace Authy.Services {
       var subject = new ClaimsIdentity(claims);
       var tokenDescriptor = new SecurityTokenDescriptor {
         Subject = subject,
-        Expires = DateTime.UtcNow.AddDays(7),
+        Expires = DateTime.UtcNow.AddYears(10),
         SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
       };
       var token = tokenHandler.CreateToken(tokenDescriptor);
