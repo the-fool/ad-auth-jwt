@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Authy.Helpers;
 using Authy.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -25,6 +26,8 @@ namespace Authy {
         public void ConfigureServices(IServiceCollection services) {
             services.AddAuthentication(HttpSysDefaults.AuthenticationScheme);
             services.AddScoped<UserService>();
+            services.AddScoped<TokenService>();
+            services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 

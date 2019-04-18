@@ -14,25 +14,35 @@ namespace Authy.Controllers {
   [ApiController]
   public class TokensController : ControllerBase {
     UserService userService;
-    public TokensController(UserService _userService) {
+    TokenService tokenService;
+    public TokensController(
+      UserService _userService,
+      TokenService _tokenService
+    ) {
       userService = _userService;
+      tokenService = _tokenService;
     }
 
     [HttpGet]
     [Authorize]
-    public ActionResult<string> Get([FromQuery(Name="rdr")] string redirect) {
-      var user = userService.WhoAmI(HttpContext);
-      var token = JsonConvert.SerializeObject(user);
+    public ActionResult<string> Get([FromQuery(Name = "rdr")] string redirect) {
+      var token = tokenService.MakeToken(HttpContext);
       var url = $"{redirect}?token={token}";
       return new RedirectResult(url, false);
     }
 
-    [HttpGet("test")]
+    [HttpGet("user")]
     [Authorize]
-    public ActionResult<string> Test([FromQuery(Name="rdr")] string redirect) {
+    public ActionResult<string> TestUser() {
       var user = userService.WhoAmI(HttpContext);
       return JsonConvert.SerializeObject(user);
     }
-    
+
+    [HttpGet("token")]
+    [Authorize]
+    public ActionResult<string> TestToken() {
+      var token = tokenService.MakeToken(HttpContext);
+      return token;
+    }
   }
 }
