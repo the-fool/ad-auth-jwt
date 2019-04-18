@@ -26,7 +26,7 @@ namespace Authy.Services {
       var tokenHandler = new JwtSecurityTokenHandler();
       var key = Encoding.ASCII.GetBytes(appSettings.Secret);
       var claims = new Claim[] {
-        new Claim("sub", user.AccountName),
+        new Claim(ClaimTypes.NameIdentifier, user.AccountName),
         new Claim("iss", "authy"),
         new Claim("name", user.DisplayName)
       };
